@@ -1,15 +1,15 @@
 "use client";
-import { motion } from "framer-motion";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { getComicsById } from "../../../../../api/api";
 import { useHero } from "../../../../../context/HeroContext";
+import ComicCard from "../../../../../components/ComicCard"; // Importe o ComicCard
 
 const Comics = () => {
   const { id } = useParams();
   const [comics, setComics] = useState([]);
   const [loading, setLoading] = useState(false);
-  const {setFavorites,favorites } = useHero()
+  const { setFavorites, favorites } = useHero();
   const [hasMore, setHasMore] = useState(true);
   const [offset, setOffset] = useState(0);
   const comicsPerPage = 5;
@@ -17,14 +17,18 @@ const Comics = () => {
   useEffect(() => {
     const storedFavorites = JSON.parse(localStorage.getItem("favorites")) || [];
     setFavorites(storedFavorites);
-  }, []);
+  }, [setFavorites]);
 
   const loadComics = () => {
     setLoading(true);
     getComicsById(id, offset, comicsPerPage)
       .then((res) => {
         const newComics = res.data.results;
-        setComics((prevComics) => [...prevComics, ...newComics]);
+        setComics((prevComics) => {
+          const comicsSet = new Set(prevComics.map((comic) => comic.id));
+          const uniqueComics = newComics.filter((comic) => !comicsSet.has(comic.id));
+          return [...prevComics, ...uniqueComics];
+        });
         setHasMore(newComics.length === comicsPerPage);
         setLoading(false);
       })
@@ -75,29 +79,15 @@ const Comics = () => {
       ) : (
         <>
           <div className="grid mt-10 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-            {comics.map((comic,i) => {
-              const image = `${comic.thumbnail.path}.${comic.thumbnail.extension}`;
+            {comics.map((comic, i) => {
               const isFavorite = favorites.some((fav) => fav.id === comic.id);
               return (
-                <motion.div
+                <ComicCard
                   key={`${comic.id}-${i}`}
-                  className="px-5 mb-10"
-                  initial={{ opacity: 0, y: 100 }}
-                  animate={{ opacity: 100, y: 0 }}
-                  transition={{ duration: 1 }}
-                >
-                  <div className="h-64 bg-gray-200 mb-3 object-cover rounded-lg">
-                    <img className="w-full h-full object-cover rounded-lg" src={image} alt={comic.title} />
-                  </div>
-                  <h1 className="text-2xl text-primary">{comic.title}</h1>
-                  <h1 className="text-md text-green-400">${comic.prices[0].price}</h1>
-                  <button
-                    onClick={() => toggleFavorite(comic)}
-                    className={`mt-3 px-4 py-2 rounded-lg text-white ${isFavorite ? "bg-red-500" : "bg-blue-500"}`}
-                  >
-                    {isFavorite ? "Remove from Favorites" : "Add to Favorites"}
-                  </button>
-                </motion.div>
+                  comic={comic}
+                  isFavorite={isFavorite}
+                  toggleFavorite={toggleFavorite}
+                />
               );
             })}
           </div>
@@ -109,9 +99,8 @@ const Comics = () => {
           )}
 
           <h1 className="text-blue-200 font-normal md:text-xl text-center m-5">
-            {comics.length === 0 && "Oops, No comics available"}
-            {comics.length !== 0 &&
-              "Note: You can buy these comics on their official website!"}
+            {comics.length === 0 && "Oops, no momento não há quadrinhos disponíveis"}
+            {comics.length !== 0 && "Note: You can buy these comics on their official website!"}
           </h1>
         </>
       )}

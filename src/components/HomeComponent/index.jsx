@@ -20,7 +20,7 @@ const HomeComponent = () => {
           animate={{ x: 0, opacity: 100 }}
           className="md:mt-24"
         >
-          Conheça detalhes de todos
+          Conheça os quadrinhos de todos
         </motion.h4>
 
         <p className="mt-6 text-secondary font-bold text-2xl md:text-3xl">

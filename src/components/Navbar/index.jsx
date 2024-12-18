@@ -99,12 +99,6 @@ const Navbar = () => {
             >
               Sobre
             </Link>
-            <Link
-              href='/feed'
-              className='px-2 py-1 text-sm font-thin text-gray-100 cursor-pointer transition duration-500 ease-in-out hover:text-blue-400 md:text-xl md:mx-2'
-            >
-              Pesquisar
-            </Link>
 
             {user && (
               <>

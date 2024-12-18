@@ -22,7 +22,7 @@ const About = () => {
       </h1>
       <hr />
       <p className='text-2xl font-semibold text-white text-center p-10'>
-      Este é um site onde podemos pesquisar os personagens da Marvel e consultar sua coleção de quadrinhos <br />
+      Este é um site onde podemos pesquisar os quadrinhos da Marvel, seja pelo personagem ou diretamente pela lista de quadrinhos. <br />
       </p>
       <p className='text-sm mt-10 mb-5 text-primary text-center'>
         Feito por Felipe Paulino com dados obtidos da api © 2024 MARVEL

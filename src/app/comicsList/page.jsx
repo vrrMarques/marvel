@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import React, { useEffect, useState } from "react";
 import { getComicsList } from "../../api/api";
 import { useHero } from "../../context/HeroContext";
+import ComicCard from "../../components/ComicCard";
 
 const Comics = () => {
   const [comics, setComics] = useState([]);
@@ -26,9 +27,13 @@ const Comics = () => {
       .then((response) => {
         const newComics = response.data.results;
         if (offset === 0) {
-          setInitialComics(newComics);
+          setComics(newComics);
+          if (search === "") {
+            setInitialComics(newComics);
+          }
+        } else {
+          setComics((prevComics) => [...prevComics, ...newComics]);
         }
-        setComics((prevComics) => [...prevComics, ...newComics]);
         setHasMore(newComics.length === comicsPerPage);
         setLoading(false);
       })
@@ -39,7 +44,7 @@ const Comics = () => {
   };
 
   useEffect(() => {
-    allComicsList(searchTerm);
+    allComicsList(searchTerm); 
   }, [offset]);
 
   const toggleFavorite = (comic) => {
@@ -83,23 +88,21 @@ const Comics = () => {
 
   const handleClearSearch = () => {
     setSearchTerm("");
-    setComics([]);
     setOffset(0);
     setHasMore(true);
-    setInitialComics([]);
+    setComics(initialComics);
   };
 
   useEffect(() => {
     if (searchTerm === "") {
-      handleClearSearch();
-      allComicsList()
+      setComics(initialComics);
     }
-  }, [searchTerm]);
+  }, [searchTerm, initialComics]);
 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
     return () => {
-      window.removeEventListener("scroll", handleScroll); // Limpar o evento de scroll ao desmontar
+      window.removeEventListener("scroll", handleScroll);
     };
   }, [hasMore, loading]);
 
@@ -126,12 +129,12 @@ const Comics = () => {
           type="text"
           value={searchTerm}
           className="w-full text-gray-900 py-3 -ml-6 lg:-ml-0 pl-11 lg:pl-14 z-0 border font-bold rounded-full border-gray-600  focus:border-primary focus:outline-none focus:ring placeholder-gray-900 bg-blue-200"
-          placeholder="Pesquisar "
+          placeholder="Pesquisar"
           onChange={handleSearchChange}
           onKeyDown={handleSearchEnter}
         />
         <button
-          className="absolute p-3 ml-2 rounded-lg  bg-primary  focus:outline-none"
+          className="absolute p-3 ml-2 rounded-lg bg-primary focus:outline-none"
           onClick={handleSearchClick}
         >
           <svg className="w-5 h-6 text-white" viewBox="0 0 24 24" fill="none">
@@ -146,11 +149,13 @@ const Comics = () => {
         </button>
       </div>
 
-      
-
       {loading && comics.length === 0 ? (
-        <div className="w-1/2 mx-auto h-full flex justify-center items-center">
-          <div className="w-16 h-16 border-t-4 border-blue-500 border-solid rounded-full animate-spin"></div>
+        <div className="w-1/3 mx-auto h-full">
+          <img
+            className="w-1/4 mt-20 md:w-1/2 mx-auto h-full"
+            src="/images/animationloading.gif"
+            alt="loading animation"
+          />
         </div>
       ) : (
         <>
@@ -159,27 +164,12 @@ const Comics = () => {
               const image = `${comic.thumbnail.path}.${comic.thumbnail.extension}`;
               const isFavorite = favorites.some((fav) => fav.id === comic.id);
               return (
-                <motion.div
+                <ComicCard
                   key={`${comic.id}-${i}`}
-                  className="px-5 mb-10"
-                  initial={{ opacity: 0, y: 100 }}
-                  animate={{ opacity: 100, y: 0 }}
-                  transition={{ duration: 1 }}
-                >
-                  <img
-                    className="mb-3 object-cover rounded-lg"
-                    src={image}
-                    alt={comic.title}
-                  />
-                  <h1 className="text-2xl text-primary">{comic.title}</h1>
-                  <h1 className="text-md text-green-400">${comic.prices[0].price}</h1>
-                  <button
-                    onClick={() => toggleFavorite(comic)}
-                    className={`mt-3 px-4 py-2 rounded-lg text-white ${isFavorite ? "bg-red-500" : "bg-blue-500"}`}
-                  >
-                    {isFavorite ? "Remove from Favorites" : "Add to Favorites"}
-                  </button>
-                </motion.div>
+                  comic={comic}
+                  isFavorite={isFavorite}
+                  toggleFavorite={toggleFavorite}
+                />
               );
             })}
           </div>
@@ -189,7 +179,7 @@ const Comics = () => {
             </div>
           )}
           <h1 className="text-blue-200 font-normal md:text-xl text-center m-5">
-            {comics.length === 0 && "Oops, No comics available"}
+            {comics.length === 0 && "Oops, no momento não há quadrinhos disponíveis"}
             {comics.length !== 0 &&
               "Note: You can buy these comics on their official website!"}
           </h1>

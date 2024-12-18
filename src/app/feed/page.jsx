@@ -41,6 +41,12 @@ const Feed = () => {
     searchHeros(value);
   };
 
+  const handleSearchEnter = (e) => {
+    if (e.key === "Enter") {
+      searchHeros(value);
+    }
+  };
+
   return (
     <>
       <div className="mt-5 w-3/4 mx-auto">
@@ -66,6 +72,7 @@ const Feed = () => {
           className="w-full text-gray-900 py-3 -ml-6 lg:-ml-0 pl-11 lg:pl-14 z-0 border font-bold rounded-full border-gray-600  focus:border-primary focus:outline-none focus:ring placeholder-gray-900 bg-blue-200"
           placeholder="Pesquisar "
           onChange={handleChange}
+          onKeyDown={handleSearchEnter}
         />
         <button
           className="absolute p-3 ml-2 rounded-lg  bg-primary  focus:outline-none"

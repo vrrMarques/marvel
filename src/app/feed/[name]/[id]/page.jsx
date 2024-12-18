@@ -1,25 +1,10 @@
 "use client";
-import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
-import { getComicsById } from "../../../../api/api";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { useHero } from "../../../../context/HeroContext";
 
 const Details = () => {
-  const { name, id } = useParams();
   const { hero } = useHero();
-  const teste = useParams();
-
-  const [comics, setComics] = useState({});
-
-  useEffect(() => {
-    if (hero) {
-      getComicsById(id)
-        .then((res) => setComics(res.data.results))
-        .catch((err) => console.log(err));
-    }
-  }, [id, name]);
 
   if (!hero) {
     return <div>Loading...</div>;
@@ -48,7 +33,7 @@ const Details = () => {
           {hero.name}
         </motion.h1>
         <p className="text-white text-md font-semibold text-md md:text-lg mt-5">
-          {hero.description || "No description available"}
+          {hero.description || "Não há descrição disponível"}
         </p>
       </motion.div>
 
@@ -60,7 +45,7 @@ const Details = () => {
       >
         <div>
           <h1 className="text-white font-black text-2xl md:text-4xl mt-10  mb-10 text-center ">
-            Comic collection
+            Coleção de quadrinhos
           </h1>
           <Link href={`/feed/${hero.name}/${hero.id}/comics`}>
             <img
