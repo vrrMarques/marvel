@@ -1,8 +1,15 @@
 "use client";
 
 import { motion } from 'framer-motion';
+import useAuth from "../../lib/useAuth";
+
 
 const About = () => {
+  const user = useAuth();
+
+  if (!user) {
+    return <div>Carregando...</div>;
+  }
   return (
     <motion.div
       initial={{ y: 200 }}

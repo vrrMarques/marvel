@@ -4,12 +4,14 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Dropdown from '../Dropdown';
 import { useHero } from "../../context/HeroContext";
-
+import { logout } from '../../lib/auth';
+import useAuth from '../../lib/useAuth';
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
-  const {setFavorites,favorites } = useHero()
+  const { setFavorites, favorites } = useHero();
+  const user = useAuth();
 
   const loadFavorites = () => {
     const storedFavorites = JSON.parse(localStorage.getItem('favorites')) || [];
@@ -38,6 +40,10 @@ const Navbar = () => {
     setModalOpen(!modalOpen);
   };
 
+  const handleLogout = async () => {
+    await logout();
+  };
+
   return (
     <motion.nav
       initial={{ y: -400 }}
@@ -52,7 +58,6 @@ const Navbar = () => {
             <Link
               href='/'
               className='text-2xl font-bold text-primary md:text-4xl cursor-pointer transition duration-500 ease-in-out hover:text-white'
-              style={{ fontFamily: '' }}
             >
               MARVELOP
             </Link>
@@ -101,12 +106,23 @@ const Navbar = () => {
               Pesquisar
             </Link>
 
-            <button
-              onClick={handleFavoritesClick}
-              className='px-2 py-1 text-sm font-thin text-gray-100 cursor-pointer transition duration-500 ease-in-out hover:text-blue-400 md:text-xl md:mx-2'
-            >
-              Favoritos
-            </button>
+            {user && (
+              <>
+                <button
+                  onClick={handleFavoritesClick}
+                  className='px-2 py-1 text-sm font-thin text-gray-100 cursor-pointer transition duration-500 ease-in-out hover:text-blue-400 md:text-xl md:mx-2'
+                >
+                  Favoritos
+                </button>
+
+                <button
+                  onClick={handleLogout}
+                  className='px-2 py-1 text-sm font-thin text-gray-100 cursor-pointer transition duration-500 ease-in-out hover:text-red-400 md:text-xl md:mx-2'
+                >
+                  Logout
+                </button>
+              </>
+            )}
           </div>
         </div>
       </div>

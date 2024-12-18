@@ -5,14 +5,20 @@ import Link from "next/link";
 import { search } from "../../api/api";
 import Card from "../../components/Card";
 import { useHero } from "../../context/HeroContext";
+import useAuth from "../../lib/useAuth";
 
 const transition = { duration: 0.6, ease: [0.43, 0.13, 0.23, 0.96] };
 
 const Feed = () => {
+  const user = useAuth();
   const { setHero } = useHero();
   const [data, setData] = useState([]);
   const [value, setValue] = useState("");
   const [loading, setLoading] = useState(false);
+
+  if (!user) {
+    return <div>Carregando...</div>;
+  }
 
   const searchHeros = (name) => {
     setLoading(true);

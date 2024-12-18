@@ -3,8 +3,14 @@ import React from "react";
 import Link from "next/link";
 import { Typewriter } from "react-simple-typewriter";
 import { motion } from "framer-motion";
+import useAuth from "../../lib/useAuth";
 
 const HomeComponent = () => {
+  const user = useAuth();
+
+  if (!user) {
+    return <div>Carregando...</div>;
+  }
   return (
     <div className="grid lg:grid-cols-2 m-8 mx-auto text-left">
       <div className="ml-8 font-semibold text-2xl text-white tracking-widest ">
