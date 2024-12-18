@@ -3,8 +3,8 @@ import Navbar from "../components/Navbar";
 import { HeroProvider } from "../context/HeroContext";
 
 export const metadata = {
-  title: "MARVEL OP",
-  description: "Web site created to search marvel characters",
+  title: "MARVEL",
+  description: "projeto criado usando api marvel",
 };
 
 export default function RootLayout({ children }) {
@@ -30,8 +30,8 @@ export default function RootLayout({ children }) {
         className="antialiased"
         style={{ fontFamily: "Rowdies, sans-serif" }}
       >
-        <Navbar />
-        <HeroProvider>{children}</HeroProvider>
+        
+        <HeroProvider><Navbar />{children}</HeroProvider>
       </body>
     </html>
   );

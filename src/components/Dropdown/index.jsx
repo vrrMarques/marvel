@@ -6,19 +6,19 @@ const Dropdown = () => {
     <div className=' text-gray-900 font-bold'>
       <div className='w-full text-center mt-3'>
         <Link
-          to='/'
+          href='/'
           className='block px-2 py-1 text-2xl font-thin text-gray-100 text-center'
         >
           Home
         </Link>
         <Link
-          to='/about'
+          href='/about'
           className='block px-2 py-1 text-2xl font-thin text-gray-100 text-center'
         >
           About
         </Link>
         <Link
-          to='/feed'
+          href='/feed'
           className='block px-2 py-1 text-2xl font-thin text-gray-100 text-center'
         >
           Search

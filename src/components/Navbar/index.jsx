@@ -3,24 +3,34 @@ import { motion } from 'framer-motion';
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Dropdown from '../Dropdown';
+import { useHero } from "../../context/HeroContext";
+
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
-  const [favorites, setFavorites] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
+  const {setFavorites,favorites } = useHero()
 
-  useEffect(() => {
+  const loadFavorites = () => {
     const storedFavorites = JSON.parse(localStorage.getItem('favorites')) || [];
     setFavorites(storedFavorites);
+  };
+
+  useEffect(() => {
+    loadFavorites();
+
+    const interval = setInterval(loadFavorites, 500);
+
+    return () => clearInterval(interval);
   }, []);
 
   const updateLocalStorage = (updatedFavorites) => {
     localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
+    setFavorites(updatedFavorites);
   };
 
   const removeFavorite = (index) => {
     const updatedFavorites = favorites.filter((_, i) => i !== index);
-    setFavorites(updatedFavorites);
     updateLocalStorage(updatedFavorites);
   };
 

@@ -2,13 +2,16 @@
 import { motion } from "framer-motion";
 import React, { useEffect, useState } from "react";
 import { getComicsList } from "../../api/api";
+import { useHero } from "../../context/HeroContext";
 
 const Comics = () => {
   const [comics, setComics] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [favorites, setFavorites] = useState([]);
+  const { setFavorites, favorites } = useHero();
   const [hasMore, setHasMore] = useState(true);
   const [offset, setOffset] = useState(0);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [initialComics, setInitialComics] = useState([]);
 
   const comicsPerPage = 5;
 
@@ -17,11 +20,14 @@ const Comics = () => {
     setFavorites(storedFavorites);
   }, []);
 
-  const allComicsList = () => {
+  const allComicsList = (search = "") => {
     setLoading(true);
-    getComicsList(comicsPerPage, offset)
+    getComicsList(comicsPerPage, offset, search)
       .then((response) => {
         const newComics = response.data.results;
+        if (offset === 0) {
+          setInitialComics(newComics);
+        }
         setComics((prevComics) => [...prevComics, ...newComics]);
         setHasMore(newComics.length === comicsPerPage);
         setLoading(false);
@@ -33,7 +39,7 @@ const Comics = () => {
   };
 
   useEffect(() => {
-    allComicsList();
+    allComicsList(searchTerm);
   }, [offset]);
 
   const toggleFavorite = (comic) => {
@@ -57,15 +63,91 @@ const Comics = () => {
     }
   };
 
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
+  const handleSearchEnter = (e) => {
+    if (e.key === "Enter") {
+      setOffset(0);
+      setComics([]);
+      allComicsList(searchTerm);
+    }
+  };
+
+  const handleSearchClick = () => {
+    setOffset(0);
+    setComics([]);
+    allComicsList(searchTerm);
+  };
+
+  const handleClearSearch = () => {
+    setSearchTerm("");
+    setComics([]);
+    setOffset(0);
+    setHasMore(true);
+    setInitialComics([]);
+  };
+
+  useEffect(() => {
+    if (searchTerm === "") {
+      handleClearSearch();
+      allComicsList()
+    }
+  }, [searchTerm]);
+
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
     return () => {
-      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("scroll", handleScroll); // Limpar o evento de scroll ao desmontar
     };
   }, [hasMore, loading]);
 
   return (
     <>
+      <div className="mt-5 w-3/4 mx-auto">
+        <span className="absolute mt-3.5 -ml-4 lg:ml-2 items-center pl-3">
+          <svg
+            className="w-5 h-5 text-gray-900"
+            viewBox="0 0 24 24"
+            fill="none"
+          >
+            <path
+              d="M21 21L15 15M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            ></path>
+          </svg>
+        </span>
+
+        <input
+          type="text"
+          value={searchTerm}
+          className="w-full text-gray-900 py-3 -ml-6 lg:-ml-0 pl-11 lg:pl-14 z-0 border font-bold rounded-full border-gray-600  focus:border-primary focus:outline-none focus:ring placeholder-gray-900 bg-blue-200"
+          placeholder="Pesquisar "
+          onChange={handleSearchChange}
+          onKeyDown={handleSearchEnter}
+        />
+        <button
+          className="absolute p-3 ml-2 rounded-lg  bg-primary  focus:outline-none"
+          onClick={handleSearchClick}
+        >
+          <svg className="w-5 h-6 text-white" viewBox="0 0 24 24" fill="none">
+            <path
+              d="M21 21L15 15M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            ></path>
+          </svg>
+        </button>
+      </div>
+
+      
+
       {loading && comics.length === 0 ? (
         <div className="w-1/2 mx-auto h-full flex justify-center items-center">
           <div className="w-16 h-16 border-t-4 border-blue-500 border-solid rounded-full animate-spin"></div>
@@ -78,7 +160,7 @@ const Comics = () => {
               const isFavorite = favorites.some((fav) => fav.id === comic.id);
               return (
                 <motion.div
-                    key={`${comic.id}-${i}`}
+                  key={`${comic.id}-${i}`}
                   className="px-5 mb-10"
                   initial={{ opacity: 0, y: 100 }}
                   animate={{ opacity: 100, y: 0 }}
@@ -90,9 +172,7 @@ const Comics = () => {
                     alt={comic.title}
                   />
                   <h1 className="text-2xl text-primary">{comic.title}</h1>
-                  <h1 className="text-md text-green-400">
-                    ${comic.prices[0].price}
-                  </h1>
+                  <h1 className="text-md text-green-400">${comic.prices[0].price}</h1>
                   <button
                     onClick={() => toggleFavorite(comic)}
                     className={`mt-3 px-4 py-2 rounded-lg text-white ${isFavorite ? "bg-red-500" : "bg-blue-500"}`}
