@@ -108,7 +108,7 @@ const Feed = () => {
         {loading ? (
           <div className="w-1/3 mx-auto h-full">
             <img
-              className="w-1/4 mt-20 md:w-1/2 mx-auto h-full"
+              className="w-3/4 mt-20 md:w-1/2 mx-auto h-full"
               src="/images/animationloading.gif"
               alt="loading animation"
             />

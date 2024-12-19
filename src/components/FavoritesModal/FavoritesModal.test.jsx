@@ -15,7 +15,7 @@ describe("FavoritesModal", () => {
 
     render(<FavoritesModal isOpen={false} onClose={jest.fn()} />);
 
-    expect(screen.queryByText("Meus Favoritos")).not.toBeInTheDocument();
+    expect(screen.queryByText("Meus quadrinhos Favoritos")).not.toBeInTheDocument();
   });
 
   test("renderiza corretamente quando isOpen é verdadeiro", () => {
@@ -23,7 +23,7 @@ describe("FavoritesModal", () => {
 
     render(<FavoritesModal isOpen={true} onClose={jest.fn()} />);
 
-    expect(screen.getByText("Meus Favoritos")).toBeInTheDocument();
+    expect(screen.getByText("Meus quadrinhos Favoritos")).toBeInTheDocument();
   });
 
   test("exibe mensagem quando não há favoritos", () => {

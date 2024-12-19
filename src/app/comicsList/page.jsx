@@ -1,5 +1,4 @@
 "use client";
-import { motion } from "framer-motion";
 import React, { useEffect, useState } from "react";
 import { getComicsList } from "../../api/api";
 import { useHero } from "../../context/HeroContext";
@@ -152,7 +151,7 @@ const Comics = () => {
       {loading && comics.length === 0 ? (
         <div className="w-1/3 mx-auto h-full">
           <img
-            className="w-1/4 mt-20 md:w-1/2 mx-auto h-full"
+            className="w-3/4 mt-20 md:w-1/2 mx-auto h-full"
             src="/images/animationloading.gif"
             alt="loading animation"
           />

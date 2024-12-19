@@ -18,7 +18,7 @@ const Details = () => {
         initial={{ top: -400 }}
         animate={{ top: 0 }}
         transition={{ type: "spring" }}
-        className="opacity-70 absolute top-0 left-0 z-0 w-full h-3/4 md:h-2/4 object-cover "
+        className="opacity-70 absolute top-0 left-0 z-0 w-full h-3/4 md:h-2/4 object-cover"
         style={{ zIndex: "-1" }}
         src={image}
         alt={hero.name}
@@ -41,20 +41,18 @@ const Details = () => {
         initial={{ opacity: 0, y: 100 }}
         animate={{ opacity: 100, y: 0 }}
         transition={{ delay: 1, duration: 1 }}
-        className="grid grid-cols-1 lg:grid-cols-2 gap-5  h-full"
+        className="flex flex-col items-center justify-center h-full mt-10"
       >
-        <div>
-          <h1 className="text-white font-black text-2xl md:text-4xl mt-10  mb-10 text-center ">
-            Coleção de quadrinhos
-          </h1>
-          <Link href={`/feed/${hero.name}/${hero.id}/comics`}>
-            <img
-              className="w-2/4 mx-auto"
-              src="/images/marvelcomics.png"
-              alt=""
-            />
-          </Link>
-        </div>
+        <h1 className="text-white font-black text-2xl md:text-4xl mb-5 text-center">
+          Coleção de quadrinhos
+        </h1>
+        <Link href={`/feed/${hero.name}/${hero.id}/comics`}>
+          <img
+            className="w-1/3 mx-auto"
+            src="/images/marvelcomics.png"
+            alt="Imagem de quadrinhos"
+          />
+        </Link>
       </motion.div>
     </>
   );

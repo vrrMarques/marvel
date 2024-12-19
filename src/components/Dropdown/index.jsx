@@ -1,15 +1,21 @@
-import Link from 'next/link';
-import useAuth from '../../lib/useAuth';
-import React, { useState } from 'react';
-import { logout } from '../../lib/auth';
-import FavoritesModal from '../FavoritesModal';
+import Link from "next/link";
+import useAuth from "../../lib/useAuth";
+import React, { useState } from "react";
+import { logout } from "../../lib/auth";
+import FavoritesModal from "../FavoritesModal";
+import HeroModal from "../HeroModal";
 
 const Dropdown = () => {
   const user = useAuth();
   const [modalOpen, setModalOpen] = useState(false);
+  const [modalOpenHero, setModalOpenHero] = useState(false);
 
   const handleFavoritesClick = () => {
     setModalOpen(!modalOpen);
+  };
+
+  const handleHeroModalClick = () => {
+    setModalOpenHero(!modalOpenHero);
   };
 
   const handleLogout = async () => {
@@ -17,17 +23,17 @@ const Dropdown = () => {
   };
 
   return (
-    <div className=' text-gray-900 font-bold'>
-      <div className='w-full text-center mt-3'>
+    <div className="text-gray-900 font-bold">
+      <div className="w-full text-center mt-3 space-y-4">
         <Link
-          href='/'
-          className='block px-2 py-1 text-2xl font-thin text-gray-100 text-center'
+          href="/"
+          className="block px-2 py-1 text-2xl font-thin text-gray-100 hover:text-blue-400"
         >
           Home
         </Link>
         <Link
-          href='/about'
-          className='block px-2 py-1 text-2xl font-thin text-gray-100 text-center'
+          href="/about"
+          className="block px-2 py-1 text-2xl font-thin text-gray-100 hover:text-blue-400"
         >
           Sobre
         </Link>
@@ -35,22 +41,30 @@ const Dropdown = () => {
         {user && (
           <>
             <button
-              onClick={handleFavoritesClick}
-              className='px-2 py-1 text-sm font-thin text-gray-100 cursor-pointer transition duration-500 ease-in-out hover:text-blue-400 md:text-xl md:mx-2'
+              onClick={handleHeroModalClick}
+              className="block w-full px-2 py-1 text-2xl font-thin text-gray-100 hover:text-blue-400 transition duration-500 ease-in-out"
             >
-              Favoritos
+              Meus Heróis
+            </button>
+
+            <button
+              onClick={handleFavoritesClick}
+              className="block w-full px-2 py-1 text-2xl font-thin text-gray-100 hover:text-blue-400 transition duration-500 ease-in-out"
+            >
+              Quadrinhos favoritos
             </button>
 
             <button
               onClick={handleLogout}
-              className='px-2 py-1 text-sm font-thin text-gray-100 cursor-pointer transition duration-500 ease-in-out hover:text-red-400 md:text-xl md:mx-2'
+              className="block w-full px-2 py-1 text-2xl font-thin text-gray-100 hover:text-red-400 transition duration-500 ease-in-out"
             >
               Logout
             </button>
           </>
         )}
       </div>
-      
+
+      <HeroModal isOpen={modalOpenHero} onClose={handleHeroModalClick} />
       <FavoritesModal isOpen={modalOpen} onClose={handleFavoritesClick} />
     </div>
   );
