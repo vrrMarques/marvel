@@ -20,7 +20,7 @@ const ComicCard = ({ comic, isFavorite, toggleFavorite }) => {
         onClick={() => toggleFavorite(comic)}
         className={`mt-3 px-4 py-2 rounded-lg text-white ${isFavorite ? "bg-red-500" : "bg-blue-500"}`}
       >
-        {isFavorite ? "Remove from Favorites" : "Add to Favorites"}
+        {isFavorite ? "Remover dos favoritos" : "Add aos favoritos"}
       </button>
     </motion.div>
   );

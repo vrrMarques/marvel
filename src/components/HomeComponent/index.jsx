@@ -13,7 +13,7 @@ const HomeComponent = () => {
   }
   return (
     <div className="grid lg:grid-cols-2 m-8 mx-auto text-left">
-      <div className="ml-8 font-semibold text-2xl text-white tracking-widest ">
+      <div className="ml-8 font-semibold text-2xl text-white tracking-widest " style={{fontFamily:'Rowdies'}}>
         <motion.h4
           initial={{ x: -200, opacity: 0 }}
           transition={{ type: "spring", duration: 0.8 }}

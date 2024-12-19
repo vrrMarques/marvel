@@ -30,12 +30,12 @@ const Navbar = () => {
     >
       <div className='container px-3 py-3 mx-auto md:flex'>
         <div className='flex items-center justify-between'>
-          <div>
+          <div style={{fontFamily:'Rowdies'}}>
             <Link
               href='/'
               className='text-2xl font-bold text-primary md:text-4xl cursor-pointer transition duration-500 ease-in-out hover:text-white'
             >
-              MARVELOP
+              MARVEL
             </Link>
           </div>
           <button
