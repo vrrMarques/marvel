@@ -5,15 +5,21 @@ import Link from 'next/link';
 import Dropdown from '../Dropdown';
 import { logout } from '../../lib/auth';
 import useAuth from '../../lib/useAuth';
+import HeroModal from '../../components/HeroModal';
 import FavoritesModal from '../FavoritesModal';
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
-  const [modalOpen, setModalOpen] = useState(false);
+  const [modalOpenComic, setModalOpenComic] = useState(false);
+  const [modalOpenHero, setModalOpenHero] = useState(false);
   const user = useAuth();
 
+  const handleHeroModalClick = () => {
+    setModalOpenHero(!modalOpenHero);
+  };
+
   const handleFavoritesClick = () => {
-    setModalOpen(!modalOpen);
+    setModalOpenComic(!modalOpenComic);
   };
 
   const handleLogout = async () => {
@@ -30,7 +36,7 @@ const Navbar = () => {
     >
       <div className='container px-3 py-3 mx-auto md:flex'>
         <div className='flex items-center justify-between'>
-          <div style={{fontFamily:'Rowdies'}}>
+          <div style={{ fontFamily: 'Rowdies' }}>
             <Link
               href='/'
               className='text-2xl font-bold text-primary md:text-4xl cursor-pointer transition duration-500 ease-in-out hover:text-white'
@@ -79,10 +85,17 @@ const Navbar = () => {
             {user && (
               <>
                 <button
+                  onClick={handleHeroModalClick}
+                  className='px-2 py-1 text-sm font-thin text-gray-100 cursor-pointer transition duration-500 ease-in-out hover:text-blue-400 md:text-xl md:mx-2'
+                >
+                  Meus Heróis
+                </button>
+                <>
+                <button
                   onClick={handleFavoritesClick}
                   className='px-2 py-1 text-sm font-thin text-gray-100 cursor-pointer transition duration-500 ease-in-out hover:text-blue-400 md:text-xl md:mx-2'
                 >
-                  Favoritos
+                  Quadrinhos Favoritos
                 </button>
 
                 <button
@@ -92,12 +105,14 @@ const Navbar = () => {
                   Logout
                 </button>
               </>
+              </>
             )}
           </div>
         </div>
       </div>
 
-      <FavoritesModal isOpen={modalOpen} onClose={handleFavoritesClick} />
+      <HeroModal isOpen={modalOpenHero} onClose={handleHeroModalClick} /> 
+      <FavoritesModal isOpen={modalOpenComic} onClose={handleFavoritesClick} />
     </motion.nav>
   );
 };

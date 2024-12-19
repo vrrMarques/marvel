@@ -6,9 +6,10 @@ const HeroContext = createContext();
 export const HeroProvider = ({ children }) => {
   const [hero, setHero] = useState(null);
   const [favorites, setFavorites] = useState([]);
+  const [favoriteHeros, setFavoriteHeros] = useState([]);
 
   return (
-    <HeroContext.Provider value={{ hero, setHero,setFavorites,favorites }}>
+    <HeroContext.Provider value={{ hero, setHero,setFavorites,favorites, setFavoriteHeros, favoriteHeros }}>
       {children}
     </HeroContext.Provider>
   );

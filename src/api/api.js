@@ -12,7 +12,7 @@ const generateHash = () => {
 export const search = async (name) => {
   const hash = generateHash();
   const response = await axios.get(
-    `https://gateway.marvel.com/v1/public/characters?nameStartsWith=${name}&ts=${ts}&apikey=${publicKey}&hash=${hash}`
+    `https://gateway.marvel.com/v1/public/characters?nameStartsWith=${name}&ts=${ts}&apikey=${publicKey}&hash=${hash}&limit=100`
   );
   return response.data;
 };

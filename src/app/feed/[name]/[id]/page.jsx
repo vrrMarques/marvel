@@ -49,7 +49,7 @@ const Details = () => {
           </h1>
           <Link href={`/feed/${hero.name}/${hero.id}/comics`}>
             <img
-              className="w-3/4 mx-auto"
+              className="w-2/4 mx-auto"
               src="/images/marvelcomics.png"
               alt=""
             />

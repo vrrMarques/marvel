@@ -6,12 +6,16 @@ import { search } from "../../api/api";
 import Card from "../../components/Card";
 import { useHero } from "../../context/HeroContext";
 import useAuth from "../../lib/useAuth";
+import useFavoriteHeros from "../../lib/useFavoriteHeros";
+import { FiHeart } from "react-icons/fi";
 
 const transition = { duration: 0.6, ease: [0.43, 0.13, 0.23, 0.96] };
 
 const Feed = () => {
   const user = useAuth();
   const { setHero } = useHero();
+  const { favoriteHeros, addFavoriteHero, removeFavoriteHero } =
+    useFavoriteHeros();
   const [data, setData] = useState([]);
   const [value, setValue] = useState("");
   const [loading, setLoading] = useState(false);
@@ -44,6 +48,16 @@ const Feed = () => {
   const handleSearchEnter = (e) => {
     if (e.key === "Enter") {
       searchHeros(value);
+    }
+  };
+
+  const handleFavoriteHero = (hero) => {
+    const isFavorite = favoriteHeros.some((fav) => fav.id === hero.id);
+    if (!isFavorite) {
+      addFavoriteHero(hero);
+    } else {
+      const index = favoriteHeros.findIndex((fav) => fav.id === hero.id);
+      removeFavoriteHero(index);
     }
   };
 
@@ -107,6 +121,7 @@ const Feed = () => {
                 whileHover={{ scale: 1.1 }}
                 transition={transition}
                 exit={{ opacity: 0 }}
+                className="relative"
               >
                 <Link
                   href={`/feed/${hero.name}/${hero.id}`}
@@ -118,6 +133,24 @@ const Feed = () => {
                     description={hero.description}
                   />
                 </Link>
+
+                <motion.button
+                  onClick={() => handleFavoriteHero(hero)}
+                  className="absolute top-3 right-3 p-2 bg-transparent text-white border-2 border-white rounded-full focus:outline-none"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{
+                    delay: 1,
+                    duration: 1,
+                    ease: "easeOut",
+                  }}
+                >
+                  {favoriteHeros.some((fav) => fav.id === hero.id) ? (
+                    <FiHeart className="text-red-500 animate-pulse" size={24} />
+                  ) : (
+                    <FiHeart className="text-gray-300 hover:text-red-500" size={24} />
+                  )}
+                </motion.button>
               </motion.div>
             ))}
           </div>
