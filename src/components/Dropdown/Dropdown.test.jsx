@@ -23,6 +23,17 @@ jest.mock("../FavoritesModal", () => ({
     ) : null,
 }));
 
+jest.mock("../HeroModal", () => ({
+  __esModule: true,
+  default: ({ isOpen, onClose }) => 
+    isOpen ? (
+      <div>
+        Hero Modal
+        <button onClick={onClose}>Fechar</button>
+      </div>
+    ) : null,
+}));
+
 describe("Dropdown", () => {
 
   test("renderiza links de navegação corretamente", () => {
@@ -32,7 +43,8 @@ describe("Dropdown", () => {
     
     expect(screen.getByText("Home")).toBeInTheDocument();
     expect(screen.getByText("Sobre")).toBeInTheDocument();
-    expect(screen.queryByText("Favoritos")).not.toBeInTheDocument();
+    expect(screen.queryByText("Quadrinhos favoritos")).not.toBeInTheDocument();
+    expect(screen.queryByText("Meus Heróis")).not.toBeInTheDocument();
     expect(screen.queryByText("Logout")).not.toBeInTheDocument();
   });
 
@@ -41,27 +53,47 @@ describe("Dropdown", () => {
 
     render(<Dropdown />);
     
-    expect(screen.getByText("Favoritos")).toBeInTheDocument();
+    expect(screen.getByText("Meus Heróis")).toBeInTheDocument();
+    expect(screen.getByText("Quadrinhos favoritos")).toBeInTheDocument();
     expect(screen.getByText("Logout")).toBeInTheDocument();
   });
 
-  test("Clique no botão Favoritos e modal", async () => {
+  test("Clique no botão Quadrinhos favoritos e modal", async () => {
     require("../../lib/useAuth").default.mockReturnValue({});
 
     render(<Dropdown />);
     
     expect(screen.queryByText("Favorites Modal")).not.toBeInTheDocument();
     
-    const favoritesButton = screen.getByText("Favoritos");
+    const favoritesButton = screen.getByText("Quadrinhos favoritos");
     
     fireEvent.click(favoritesButton);
     
     await waitFor(() => expect(screen.getByText("Favorites Modal")).toBeInTheDocument());
     
-    const closeModalButton = screen.getByText("Fechar"); // Alterado para "Fechar"
+    const closeModalButton = screen.getByText("Fechar");
     fireEvent.click(closeModalButton);
     
     await waitFor(() => expect(screen.queryByText("Favorites Modal")).not.toBeInTheDocument());
+  });
+
+  test("Clique no botão Meus Heróis e modal", async () => {
+    require("../../lib/useAuth").default.mockReturnValue({});
+
+    render(<Dropdown />);
+    
+    expect(screen.queryByText("Hero Modal")).not.toBeInTheDocument();
+    
+    const heroButton = screen.getByText("Meus Heróis");
+    
+    fireEvent.click(heroButton);
+    
+    await waitFor(() => expect(screen.getByText("Hero Modal")).toBeInTheDocument());
+    
+    const closeModalButton = screen.getByText("Fechar");
+    fireEvent.click(closeModalButton);
+    
+    await waitFor(() => expect(screen.queryByText("Hero Modal")).not.toBeInTheDocument());
   });
 
   test("chama a função de logout quando o botão Logout é clicado", async () => {
