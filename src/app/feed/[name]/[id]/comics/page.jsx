@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { getComicsById } from "../../../../../api/api";
 import { useHero } from "../../../../../context/HeroContext";
-import ComicCard from "../../../../../components/ComicCard"; // Importe o ComicCard
+import ComicCard from "../../../../../components/CardComic";
 
 const Comics = () => {
   const { id } = useParams();
