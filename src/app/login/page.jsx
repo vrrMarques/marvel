@@ -25,24 +25,30 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex justify-center items-center h-screen bg-gray-100">
+    <div className="flex justify-center items-center h-screen bg-gray-300" style={{ fontFamily: "Rowdies" }}>
       <div className="flex flex-col items-center bg-white p-8 rounded-lg shadow-lg">
         <h2 className="text-2xl font-bold mb-6">Login com sua conta</h2>
-        
+
         <button
           onClick={() => handleSignIn("google")}
           disabled={loading}
-          className="bg-blue-500 text-white px-6 py-3 rounded-lg mb-4"
+          className="bg-blue-500 text-white px-6 py-3 rounded-lg mb-4 flex items-center justify-center"
         >
-          {loading ? "Carregando..." : "Login com Google"}
+          {loading ? "Carregando..." : <>
+            <img src="/images/google.png" alt="Google" className="mr-2 w-6 h-6" />
+            Login com Google
+          </>}
         </button>
 
         <button
           onClick={() => handleSignIn("github")}
           disabled={loading}
-          className="bg-gray-800 text-white px-6 py-3 rounded-lg"
+          className="bg-gray-800 text-white px-6 py-3 rounded-lg flex items-center justify-center"
         >
-          {loading ? "Carregando..." : "Login com GitHub"}
+          {loading ? "Carregando..." : <>
+            <img src="/images/github.png" alt="GitHub" className="mr-2 w-6 h-6" />
+            Login com GitHub
+          </>}
         </button>
       </div>
     </div>
