@@ -28,7 +28,7 @@ export default function RootLayout({ children }) {
       </head>
       <body
         className="antialiased"
-        style={{ fontFamily: "Major Mono Display, sans-serif" }}
+        style={{ fontFamily: "Rowdies, sans-serif" }}
       >
         
         <HeroProvider><Navbar />{children}</HeroProvider>
