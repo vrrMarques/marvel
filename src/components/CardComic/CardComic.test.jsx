@@ -23,7 +23,7 @@ describe('ComicCard', () => {
   test('chama toggleFavorite quando o botão é clicado', () => {
     render(<ComicCard comic={mockComic} isFavorite={false} toggleFavorite={mockToggleFavorite} />);
     
-    const button = screen.getByText("Add to Favorites");
+    const button = screen.getByText("Add aos favoritos");
     
     fireEvent.click(button);
     
@@ -33,11 +33,11 @@ describe('ComicCard', () => {
   test('botão exibe o texto correto com base em isFavorite', () => {
     const { rerender } = render(<ComicCard comic={mockComic} isFavorite={false} toggleFavorite={mockToggleFavorite} />);
     
-    expect(screen.getByText("Add to Favorites")).toBeInTheDocument();
+    expect(screen.getByText("Add aos favoritos")).toBeInTheDocument();
     
     rerender(<ComicCard comic={mockComic} isFavorite={true} toggleFavorite={mockToggleFavorite} />);
     
-    expect(screen.getByText("Remove from Favorites")).toBeInTheDocument();
+    expect(screen.getByText("Remover dos favoritos")).toBeInTheDocument();
   });
 
 });
