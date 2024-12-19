@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import React, { useEffect, useState } from "react";
 import { getComicsList } from "../../api/api";
 import { useHero } from "../../context/HeroContext";
-import ComicCard from "../../components/ComicCard";
+import ComicCard from "../../components/CardComic";
 
 const Comics = () => {
   const [comics, setComics] = useState([]);
