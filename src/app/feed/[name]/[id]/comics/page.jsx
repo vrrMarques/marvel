@@ -100,7 +100,7 @@ const Comics = () => {
 
           <h1 className="text-blue-200 font-normal md:text-xl text-center m-5">
             {comics.length === 0 && "Oops, no momento não há quadrinhos disponíveis"}
-            {comics.length !== 0 && "Note: You can buy these comics on their official website!"}
+            {comics.length !== 0 && "Nota: Você pode comprar os quadrinhos no site oficial!"}
           </h1>
         </>
       )}
