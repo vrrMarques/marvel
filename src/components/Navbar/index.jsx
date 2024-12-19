@@ -1,40 +1,16 @@
 'use client';
 import { motion } from 'framer-motion';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import Dropdown from '../Dropdown';
-import { useHero } from "../../context/HeroContext";
 import { logout } from '../../lib/auth';
 import useAuth from '../../lib/useAuth';
+import FavoritesModal from '../FavoritesModal';
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
-  const { setFavorites, favorites } = useHero();
   const user = useAuth();
-
-  const loadFavorites = () => {
-    const storedFavorites = JSON.parse(localStorage.getItem('favorites')) || [];
-    setFavorites(storedFavorites);
-  };
-
-  useEffect(() => {
-    loadFavorites();
-
-    const interval = setInterval(loadFavorites, 500);
-
-    return () => clearInterval(interval);
-  }, []);
-
-  const updateLocalStorage = (updatedFavorites) => {
-    localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
-    setFavorites(updatedFavorites);
-  };
-
-  const removeFavorite = (index) => {
-    const updatedFavorites = favorites.filter((_, i) => i !== index);
-    updateLocalStorage(updatedFavorites);
-  };
 
   const handleFavoritesClick = () => {
     setModalOpen(!modalOpen);
@@ -82,7 +58,7 @@ const Navbar = () => {
             </svg>
           </button>
         </div>
-        <div className='md:hidden'>{open && <Dropdown className='' />}</div>
+        <div className='md:hidden'>{open && <Dropdown />}</div>
 
         <div className='w-full hidden md:ml-14 md:flex md:items-center md:justify-between'>
           <div className=''></div>
@@ -121,36 +97,7 @@ const Navbar = () => {
         </div>
       </div>
 
-      {modalOpen && (
-        <div className='fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50'>
-          <div className='bg-[#001f3d] p-5 rounded-md w-[80vw] max-h-[80vh] overflow-y-auto'>
-            <h2 className='text-2xl font-bold mb-4 text-[#FF3395]'>Meus Favoritos</h2>
-            <ul>
-              {favorites.length === 0 ? (
-                <li className='py-1 text-[#FF3395]'>Nenhum favorito encontrado.</li>
-              ) : (
-                favorites.map((favorite, index) => (
-                  <li key={index} className='py-1 text-[#FF3395] flex justify-between items-center'>
-                    {favorite.title ? favorite.title : "Sem título"} 
-                    <button
-                      onClick={() => removeFavorite(index)}
-                      className='text-[#FF3395] bg-transparent border-none cursor-pointer'
-                    >
-                      Remover
-                    </button>
-                  </li>
-                ))
-              )}
-            </ul>
-            <button
-              onClick={handleFavoritesClick}
-              className='mt-4 px-4 py-2 bg-blue-500 text-white rounded-md'
-            >
-              Fechar
-            </button>
-          </div>
-        </div>
-      )}
+      <FavoritesModal isOpen={modalOpen} onClose={handleFavoritesClick} />
     </motion.nav>
   );
 };
